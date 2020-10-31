@@ -20,7 +20,7 @@ def Cross(center, radius, facecolor='none',
 
 
 class Board:
-    def __init__(self, p1, p2, p3=None, visual=False):
+    def __init__(self, p1, p2, p3=None, visual=False, save=False):
         self.visual = visual
         self.state = np.zeros((3, 3), dtype=np.int64)
         self.p1 = p1
@@ -30,6 +30,7 @@ class Board:
         self.over = False
         self.symbol = 1
         self.results = []
+        self.save_history = save
 
     def encode_state(self):
         # needs to be used as key for dictionary
@@ -169,12 +170,14 @@ class Board:
             self.p1.change_exploration(epsilon)
             self.Players = [self.p1, self.p2]
             self.train(max_rounds=batch_size)
-            self.save_history('train_{:05}'.format(batch))
+            if self.save_history:
+                self.save_history('train_{:05}'.format(batch))
             # let trained agent play his best moves
             self.p1.change_exploration(.0)
             self.Players = [self.p1, self.p3]
             self.play(max_rounds=1)
-            self.save_history('play_{:05}'.format(batch))
+            if self.save_history:
+                self.save_history('play_{:05}'.format(batch))
 
     def save_history(self, name):
         print(name)
@@ -462,7 +465,7 @@ if __name__ == '__main__':
     a2 = Agent('Agent 2', epsilon=0.3)  # Agent 2
     p1 = Player('1')  # Human Player
     p2 = Player('Ideal 3', method='ideal')  # Ideal computer-player
-    B = Board(a1, p2, p3=p2, visual=False)  # create Board
+    B = Board(a1, p2, p3=p2, visual=False, save=False)  # create Board
     max_rounds = 10000
     batch_size = 100
     # Train for max_rounds, test against perfect opponent after every batch
