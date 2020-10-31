@@ -457,14 +457,18 @@ class Player:
 
 
 if __name__ == '__main__':
-    a1 = Agent('Agent 1', epsilon=0.3)
-    a2 = Agent('Agent 2', epsilon=0.3)
-    p1 = Player('1')
-    p2 = Player('Ideal 3', method='ideal')
-    B = Board(a1, p2, p3=p2, visual=False)
-    B.alternate_train_play(100, 10000)
-    # B2 = Board(a1, p1, visual=True)
-    # B2.play(10)#
+    # create Players/Agents
+    a1 = Agent('Agent 1', epsilon=0.3)  # Agent 1
+    a2 = Agent('Agent 2', epsilon=0.3)  # Agent 2
+    p1 = Player('1')  # Human Player
+    p2 = Player('Ideal 3', method='ideal')  # Ideal computer-player
+    B = Board(a1, p2, p3=p2, visual=False)  # create Board
+    max_rounds = 10000
+    batch_size = 100
+    # Train for max_rounds, test against perfect opponent after every batch
+    B.alternate_train_play(batch_size, max_rounds)
+
+    # plot state action values for some states
     state = np.zeros((3, 3), dtype=np.int64)
     a1.plot_state_action_values(state, 1, path='state_action_start.png')
     state[2, 0] = 1
