@@ -315,7 +315,6 @@ class Player:
         return move
 
     def move_ideal(self, legal_moves, current_state, symbol):
-        '''Mostly taken from previous project TicTacToe.py'''
         '''find ideal move based on the following priorities:
         1. Win
         2. Block
